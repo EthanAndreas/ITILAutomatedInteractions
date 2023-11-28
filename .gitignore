@@ -1,0 +1,13 @@
+.ansible/
+.config/
+.local/
+.ssh/
+.vim/
+.vscode-server/
+.bash_history
+.bash_logout
+.bashrc
+.gitconfig
+.profile
+.viminfo
+.wget-hsts

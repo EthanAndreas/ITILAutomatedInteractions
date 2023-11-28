@@ -1,0 +1,20 @@
+- name: Déploiement de l'agent FusionInventory
+  hosts: all
+  become: true
+  tasks:
+    - name: Exécuter apt update avec --allow-releaseinfo-change
+      command: apt update --allow-releaseinfo-change
+
+    - name: Installation du paquet FusionInventory-Agent
+      package:
+        name: fusioninventory-agent
+        state: present
+
+    - name: Configuration de l'agent FusionInventory
+      lineinfile:
+        path: /etc/fusioninventory/agent.cfg
+        regex: '^server'
+        line: 'server = http://192.168.57.98/glpi/plugins/fusioninventory/'
+      
+    - name: Restart FusionInventory Agent
+      command: fusioninventory-agent

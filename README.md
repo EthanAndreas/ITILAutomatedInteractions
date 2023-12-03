@@ -1,11 +1,17 @@
-# Deployment
+# Deploiement
 
 ```bash
 ansible-playbook -i hosts playbook.yaml
 ```
 
-# Parsing
+# Parser et créer l'inventaire ansible
 
 ```bash
-ansible -i auth.sh -m ping all
+ansible -i inventory.sh -m ping all
+```
+
+# Parser et créer les fichiers de configuration de nagios
+
+```bash
+sudo ./nagios.sh
 ```

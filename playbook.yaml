@@ -1,8 +1,9 @@
 - name: Déploiement de l'agent FusionInventory
   hosts: all
   become: true
+  tags: fusioninventory
   tasks:
-    - name: Exécuter apt update avec --allow-releaseinfo-change
+    - name: Mise à joure du système via apt update avec --allow-releaseinfo-change
       command: apt update --allow-releaseinfo-change
 
     - name: Installation du paquet FusionInventory-Agent
@@ -16,5 +17,16 @@
         regex: '^server'
         line: 'server = http://192.168.57.98/glpi/plugins/fusioninventory/'
       
-    - name: Restart FusionInventory Agent
+    - name: Redémarrage de l'agent FusionInventory 
       command: fusioninventory-agent
+
+- name: Déploiement de Nagios
+  hosts: localhost
+  become: true
+  tags: nagios
+  tasks:
+    - name: Configuration de Nagios
+      command: /home/tprli/config-nagios.sh
+      
+    - name: Redémarrage de Nagios
+      command: systemctl restart nagios4

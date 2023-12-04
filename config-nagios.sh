@@ -27,10 +27,27 @@ if [ -n "$sessiontoken" ]; then
     echo "        check_interval          1" >> /etc/nagios4/objects/pc.cfg
     echo "}" >> /etc/nagios4/objects/pc.cfg
   done
+fi
 
-  if ! grep -q "cfg_file=/etc/nagios4/objects/pc.cfg" /etc/nagios4/nagios.cfg; then
-    echo "cfg_file=/etc/nagios4/objects/pc.cfg" >> /etc/nagios4/nagios.cfg
-  fi
+if ! grep -q "cfg_file=/etc/nagios4/objects/pc.cfg" /etc/nagios4/nagios.cfg; then
+  echo "cfg_file=/etc/nagios4/objects/pc.cfg" >> /etc/nagios4/nagios.cfg
+fi
 
-  systemctl restart nagios4
+cat << 'EOF' >> /etc/nagios-plugins/config/smtp.cfg
+define command {
+    command_name check_smtp
+    command_line /home/tprli/check_smtp
+}
+
+define service {
+    use generic-service
+    host_name localhost
+    service_description Check SMTP
+    check_command check_smtp
+    check_interval 1
+}
+EOF
+
+if ! grep -q "cfg_file=/etc/nagios-plugins/config/smtp.cfg" /etc/nagios4/nagios.cfg; then
+  echo "cfg_file=/etc/nagios-plugins/config/smtp.cfg" >> /etc/nagios4/nagios.cfg
 fi

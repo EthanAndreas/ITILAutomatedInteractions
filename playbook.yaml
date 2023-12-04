@@ -18,15 +18,69 @@
         line: 'server = http://192.168.57.98/glpi/plugins/fusioninventory/'
       
     - name: Redémarrage de l'agent FusionInventory 
-      command: fusioninventory-agent
+      command: systemctl restart fusioninventory-agent
+
+- name: Déploiement de SNMP
+  hosts: all
+  become: true
+  tags: snmp
+  tasks:
+    - name: Installation du daemon SNMP
+      package:
+        name: snmpd
+        state: present
+    
+    - name: Installation du command-line SNMP
+      package:
+        name: snmp
+        state: present
+
+    - name: Mettre en écoute sur toutes les adresses IPv4 et IPv6 sur le port 161
+      lineinfile:
+        path: /etc/snmp/snmpd.conf
+        regexp: '^#?(\s*)agentAddress'
+        line: 'agentAddress udp:161,udp6:[::1]:161'
+
+    - name: Modification de la communauté SNMP en readonly default example
+      lineinfile:
+        path: /etc/snmp/snmpd.conf
+        regexp: '^#?(\s*)com2sec'
+        line: 'com2sec readonly default example'
+
+    - name: Ajout d'une directive proc pour le processus sleep
+      lineinfile:
+        path: /etc/snmp/snmpd.conf
+        regexp: '^#?(\s*)proc'
+        line: 'proc sleep'
+
+    - name: Redémarrage de SNMP
+      command: systemctl restart snmpd
+
+# Il y a un problème dû à un OID non lié
+# - name: Vérification de l'agent SNMP sur pc1
+#   hosts: pc1
+#   become: true
+#   tasks:
+#     - name: Interrogation de l'agent SNMP
+#       shell: snmpwalk -v2c -c example pc1 UCD-SNMP-MIB::prTable
+#       register: snmp_result
+
+#     - debug:
+#         var: snmp_result.stdout_lines
+#       when: snmp_result is defined
 
 - name: Déploiement de Nagios
   hosts: localhost
   become: true
   tags: nagios
   tasks:
+    - name: Installation des paquets Nagios
+      package:
+        name: nagios4
+        state: present
+
     - name: Configuration de Nagios
       command: /home/tprli/config-nagios.sh
-      
+
     - name: Redémarrage de Nagios
       command: systemctl restart nagios4

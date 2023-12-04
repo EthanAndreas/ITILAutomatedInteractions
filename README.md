@@ -10,9 +10,14 @@ ansible-playbook -i hosts playbook.yaml --tags fusioninventory
 ansible-playbook -i dynamic-inventory.sh playbook.yaml --ask-become-pass --tags fusioninventory
 ```
 
-## Supervision avec Nagios
+## Supervision avec Nagios et Check Nagios
 ```bash
 ansible-playbook -i dynamic-inventory.sh playbook.yaml --ask-become-pass --tags nagios
+```
+
+## SNMP et Check SNMP dans Nagios 
+```bash
+ansible-playbook -i dynamic-inventory.sh playbook.yaml --ask-become-pass --tags snmp
 ```
 
 ## Aide

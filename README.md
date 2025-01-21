@@ -1,28 +1,28 @@
-# Interactions automatisées entre des processus de gestion d'infrastructure
+# Automated Interactions Between Infrastructure Management Processes
 
-## Installation de l'agent fusioninventory
+## Installing the FusionInventory Agent
 ```bash
 ansible-playbook -i hosts playbook.yaml --tags fusioninventory
 ```
 
-## Utilisation de l'API de GLPI
+## Using the GLPI API
 ```bash
 ansible-playbook -i dynamic-inventory.sh playbook.yaml --ask-become-pass --tags fusioninventory
 ```
 
-## Supervision avec Nagios et Check Nagios
+## Monitoring with Nagios and Check Nagios
 ```bash
 ansible-playbook -i dynamic-inventory.sh playbook.yaml --ask-become-pass --tags nagios
 ```
 
-## SNMP et Check SNMP dans Nagios 
+## SNMP and Check SNMP in Nagios
 ```bash
 ansible-playbook -i dynamic-inventory.sh playbook.yaml --ask-become-pass --tags snmp
 ```
 
-## Aide
+## Help
 
-- Se connecter aux machines
+- Connecting to the machines
 
 ```bash
 ssh pc1 -l root
@@ -30,7 +30,7 @@ ssh pc2 -l root
 ssh pc3 -l root
 ```	
 
-- Faire un chmod +x sur les scripts bash
+- Making bash scripts executable
     
 ```bash
 chmod +x *.sh
